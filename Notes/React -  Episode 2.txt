@@ -1,0 +1,99 @@
+02. Ignite Our App
+
+NPM : Basically standard repository for all the packages. All the packages are hosted here.
+NPM Does not have any fullform
+
+npm int => To initialize the package.json file
+Package.json is a configuration for npm
+Why do we need Package.json ? -> 
+pacakges are also called as dependecies
+
+Now we can install packages and install dependencies to our project
+Dependencies:
+1. Bundler: Which is required to bundle, minification and removing unwanted comments, clean code which needs to pushed to production
+	Webpack, parcel, Veet -> bundlers
+	Job: It bundles and packages your app
+	
+2. In our project we are going to use Parcel Bundlers and it easy to configure
+
+Install Parcel Packages
+> npm install -D parcel -->  -D is Dev Dependency
+There are 2 types of dependecy we can configure or install in our project
+1. Dev Dependencies -> It means it is genrally required in devlopement environement or phase
+2. Normal Dependencies -> Used in Prodution
+
+^ -> npm installs -> Its okay to minor upgrade and not Major 
+~ -> Install Major version
+
+
+package-lock.json
+- It has a track of exact versions of the dependecies which we installed
+
+node_modules: Consits of all the dependecies and all the packages are available.
+
+Transitive dependecies :
+Parcel -> It has depedent on other thing -> And those projects has depedent on other packages -> Hence it will downlaoded all the depedent packages.
+Parcel uses Babel
+
+npm init -> to create the package.json file > which is a configuration file for the project
+
+node_modules -> Should not pushed to Git
+-> Best practice is to keep this in .gitignore
+-> package and package-lock file also should not be included in the gitignore
+-> If we have package.json and package-lock.json then we can recreate entore node modules using npm install
+-> why we need to push them to gitignore ?
+	* Since its a huge files and its a not advisable to push to git repo
+npm > used for the installing packages	
+npx > executing the package
+
+We should not use CDN to call out the react library, because it causes the costly operations. we dont want to make the another network call. So we need to use the package.json and install using npm packages.
+
+Installing react 
+> npm install react
+
+Installing React DOM
+> npm install react-dom
+> npm i react-dom
+
+Now once we build the project we get error as @parcel/transformer-js: Browser scripts cannot have imports or exports.
+since the javascript which we called in index.html (<script src="./App.js"></script>) is considered as normal browser script and browser script doesnt understand what is the import or rxport statements.
+In order avoid these error we need to make sure the script we called we need to add type = "module"  while calling the script (eg. <script type="module" src="./App.js"></script>)
+
+While importing the RactDOM we need to import it from the react-dom/client
+
+
+# Parcel (parceljs.org)
+- Dev build
+- Local server
+- HMR - hot Module reload.
+- It uses the File watching algorithms > Written in C++
+- Faster Build > Because of caching > which created on our project files
+- Image Optimization
+- It will do Minificaion when we do build for production
+- Compress the file.
+- It using Consistent hashing
+- Code splitting
+- Differential bundling > to support older browsers
+- Provides a feature to host application using HTTPS
+- Tree shaking algorithm - will remove unused code
+- Different Dev and Prod bundles 
+
+
+To build production app: 
+> npx parcel build index.html 
+
+To Build dev:
+> npx parcel index.html
+	> dist 
+	> .parcel-cache 
+2 folders automatically created.
+
+when we build the files were availale in the dist folder
+
+
+how we can configure that our application should support the older versions of browsers (browserslist.dev)
+1. Go to > package.json file
+	"browserslist":[
+		"last 2 chrome version"
+	]
+

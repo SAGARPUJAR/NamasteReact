@@ -1,0 +1,101 @@
+React - Episode 3 : Laying the Foundation
+
+We can run our react project using script.
+We need to define our scripts in package.json > Script section as below
+  "scripts": {
+    "test": "jest",
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+
+How to run these scripts ?
+* we need to execute as below
+> npm run start | npm start -> Both works same
+> npm run build
+
+
+-> React Element -> End of the its a object 
+-> when we render this to DOM then it becomes its HTML
+const heading = React.createElement("h1", { id: "intHeaderId" }, "Namste React 🚀🚀");
+
+//Create Root Element using ReactDOM
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+//Render the heading to DOM
+root.render(heading); 
+
+When root.render is called it takes the react element and convert this to HTML element and show in the UI (When root.render() is called, React takes the React Element (a JavaScript object), creates the corresponding DOM elements, and inserts or updates them in the browser's DOM so they appear as HTML on the UI.)
+
+-> End of the day everthing we write in the React is the Object
+
+
+As you can see when creating the react elements it takes time write and its becoming more code. So what facebook/meta developers did was they created something called JSX
+
+JSX: JavaScript XML, which is help us to create an HTML elemenets within the JS file
+JSX is not part of React.
+JSX -> Merges the HTML and JavaScript together
+JSX  - Its HTML LIKE or XML like syntax
+syntax:
+// JSX  - Its HTML LIKE or XML like syntax
+const jsxHeading = <h1 id="intHeaderId">Namaste React 🚀🚀 Using JSX</h1>;
+
+Is above code is understand by Js Engine ?? NO -> It will understand the ECMA Script
+and the code which we written is not a valid Pure javascript code and JS engine will not understand this.
+
+If it is not understand by the browser how this is rendered in the UI??
+Because Parcel is doing the job for us. even before going to JS engine it is transpiled.(the code is converted to Javascript Engine understandable)
+JSX (Transpiled before it reaches to JS engine) -> Who does this Parcel -> Parcel alone cannot do this and we have something called Babel 
+JSX -> Parcel -> Babel
+JSX -> Converted to React.Element Behind the scenes -> JS Object -> HTML element (render)	
+
+We aritting this code for Machines or Humans ? => We are writting for both, First for human and then for machine
+
+Babel is converting JSX to React element
+Babel is open source Javascript Compiler / It is Traspiler
+
+const jsxHeading = <h1 id="intHeaderId">Namaste React 🚀🚀 Using JSX</h1>;
+The above code is not HTML  -> Because when we write class in React we need to write it as a className, these are the common difference we need to know.
+
+const jsxHeading = <h1 id="intHeaderId" className="header">Namaste React 🚀🚀 Using JSX</h1>;
+
+And if you want to provide a attribute to JSX then we need to follow the camel Case
+
+If you want to write a multi line code then we need to wrap inside the Bracekts () -> So that babel will understand which is the start and end point of the JSX code.
+
+JSX => Babel will transpile into => React.createElement => ReactElement - JS Object => HTML Element (render)
+
+
+React Component:
+1. We header that everthing in react is component => Example Header, footer, input box, title, search bar, card etc
+2. so what is component: there are 2 types
+ 	1. Class Based components => Old way of writting the component => It uses javascript class
+	2. Functional Components  => New way of writting the component => It uses javascript function
+3. React Fucntional Component : its a just a normal javascript function which returns the JSX element 
+	or React Component is JS function which returns the React Elements
+	
+4. How we will render the Coomponet ? 
+	- We need to use <ComponentName /> 
+	- this is how babel will understand 
+	- Example: 
+			const Header1 = () => (
+				<h1 className="header">Welcome to React Compoenent from Compoenent</h1>
+			);
+			root.render(<Header1 />);
+5. Component Composition 
+	=> Calling Compoenent into another component
+	=> Example:
+		const Title = () => <h1>Namaste React 🚀🚀🚀🚀</h1>;
+		const Heading = () => {
+			return (
+				<>
+					<Title />
+					<h1>Welcome to React Functional Component</h1>
+				</>
+			);
+		};
+
+{} => Inside the react component we if we can use flower brackets then we can run any kind of javascript expression
+
+Cross site scriptting
+=> JSX takes care of injection attacks, even if malicious data is passed to element then JSX will escape this / sanitizing the data => {title} whatever we pass in the expression it sanitizes everything what ever it recieves
+=> Read about how it is escaping and how this works behind ?
