@@ -1,0 +1,44 @@
+Episode 4: Talk is cheap, show me the code
+Project => Food Ordering App
+
+Whenever you are asked us to develope the project as a senior engineer, we need to understand the business and Plan
+
+Planning:
+1. You should know what exactly you are going build
+2. What is the process of building it
+3. How UI should like
+
+App Name: Sagar Resturent Since 1998
+
+pros: Properties : when we want to pass the something to be passed to component then we will be using the props in React
+Passing props to component is like passing the arguments to the functions
+
+when we pass we can pass in different way 
+1. Passing as props
+	Example:
+	const RestaurantCard = (props) => {}
+
+2. Destructuring on fly
+	Example:
+	const RestaurantCard = ({resName, cusines}) => {
+	}
+
+3. another way
+	const RestaurantCard = (props) => {
+		const {resName, cusines} = props;
+	}
+	
+	
+Config Driven UI:
+-> ALl UI is driven by Config
+=> how this is driven ? using the Backend API
+
+?. -> Optional Chaining
+
+=> Make sure whenever you use map, use key to uniquely identify the componets or attribute.
+=> It effects huge performance optimization.
+=> key is very important.
+=> If we ar eusing Ids then react will uniquly identify the things and render only required components.
+=> If we are not using Ids then react will re-render entire thing in the UI
+
+=> React DOC itself says that never use indexes as the keys.
