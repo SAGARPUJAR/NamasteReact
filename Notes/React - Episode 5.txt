@@ -1,0 +1,48 @@
+React - Episode 5 => Lets get Hooked
+
+=> Going to cover React hooks
+
+==> File extension
+	.js
+	.jsx
+	
+=> 2 types of export and Import
+	- Default Export
+		export default RestaurantCard;
+	- Default Import
+		import RestaurantCard from "./RestaurantCard";
+	- Named Export
+		export const LOGO_URL =
+			"https://e7.pngegg.com/pngimages/926/744/png-clipart-803-food-delivery-llc-restaurant-delivery-food-food-eating.png";
+			
+	- Named Import 
+		import { LOGO_URL } from "../utils/constants";
+		
+
+React is fast and efficient in DOM manipulation
+
+Hooks:
+=> React hook is normal js utility function which is given by React
+=> Important Hooks	
+	-> useState()  
+		- Used to generate the superpoweful state variable in react
+		- Import useState
+	-> useEffect()
+
+
+=> Whenever state variable updates React Re-render my component
+=> lets understand how react re-renders the components:
+	- React uses somehting called reconciliation Algorithm also know React Fibre
+	- On the UI we have a tree
+		- res-container -> has 7 cards
+			- React react creates the Virtual DOM
+			- Virtual DOM => Representation of Actual DOM
+		- UI changes to 3 filtered cards
+		
+	- Diff Algorithms
+		- Find the difference between Actual DOM and Virtual DOM
+		- Calcuare the difference and update the  DOM
+=> React Fiber or Reconciliation algorithm is introduced in React 16
+
+=> React Fiber Architecture => github.com/acdlite/react=fiber-architecture
+		
