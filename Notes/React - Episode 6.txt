@@ -1,0 +1,56 @@
+React Episode 06 => Exploring the React world
+1. Monolothic and Mivroservice architecture
+   => Monolothic:
+		- Traditional application were built using monolothic and all the source code was kept inside the one solution and becomes huge bigg project
+		- It has 
+			* API Code
+			* UI Code
+			* Auth Code
+			* DB
+			* SMS
+		- Even if we want to change any small component, we need to rebuild entire project and deploy the whole project
+
+2. MicroService Architecture
+	- In MicroServices we have different services for each job
+	- Monolothic application which we listed above can be divided into multiple services.
+	- All this small services combined together become huge project.
+	- In MicroServices the services are independednt and talk to each other based on the requirements.
+	- This is called as Seperation of Concerns => It follows Single Responsibility Principles => each services has it own job.
+	- How do services intract to each other ?
+		- All the services run on their own specific ports
+		- They make a call to different URLs
+	- Microservices, we can have any stack to develop the each services
+	
+=> 2 Approches how frontend will fetch the data from the Backend
+	1. Loads -> API -> Render on UI -> 500ms response time
+	2. Loads -> render the UI -> API Call -> Render the data once data comes from API (In React we will be using this Approch)
+		-> Better user experiance
+		-> React has best Rendering mechanism
+		
+=> useEffect() Hook
+	- Hook is nothing but normal javascript function
+	- Purpose of useEffect()
+		- Named import
+		- Takes 2 arguments
+			1. Call back method
+			2. Depedency Array
+		Example:
+			useEffect(() => {
+				console.log("useEffect rendered");
+			}, []);
+	- As soon as component rendering cycles is completed then useEffect() method will be called automatically
+	
+=> when we call swiggy API, it throw error as not permitted to call the api to localhost and restricted by browser
+
+=> optional chaining
+
+=> Shimmer ui
+	- Shimmer API resembles the page's actual UI, so user will understand how quickly the web or mobile app will load even before the content has shown up
+	- We load a fake page untill we get the correct data.
+	
+=> conditional rendering:
+	-> Rendering the component based on the conditions is called conditional rendering
+	
+=> Why do we need the state variable, when we can create the normal const variable ?
+	-> whenever the state variable change, react will re-render the component automatically
+	-> whenever the state variable change, react triggers a reconcilliation cycles(re-renders the component)
