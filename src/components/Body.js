@@ -16,7 +16,7 @@ const Body = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9568868&lng=77.52002089999999&page_type=DESKTOP_WEB_LISTING",
+        "https://corsproxy.io/?url=https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9568868&lng=77.52002089999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
       );
       const json = await response.json();
 
