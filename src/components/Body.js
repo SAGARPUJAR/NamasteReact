@@ -71,9 +71,9 @@ const Body = () => {
           id="filter-dtn"
           onClick={() => {
             const filteredData = resListData.filter(
-              (res) => Number(res.avgRating) > 4.3,
+              (res) => Number(res?.avgRating) > 4.4,
             );
-            setResList(filteredData);
+            setFilteredRestaurants(filteredData);
           }}
         >
           Top rated restaurant
