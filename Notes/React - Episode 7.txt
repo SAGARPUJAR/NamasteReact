@@ -1,0 +1,251 @@
+Episode 7 : Finding the Path 
+=> We will see routing today
+
+* useEffect() Hook =>
+	- Called from react library using named import {useEffect}
+	- It takes 2 arguments 
+		1. Call back funciton
+		2. Depedency array
+	- useEffect(()=>{
+		console.log("Use Effect called")
+	  }, [])
+
+	- useEffect called when component re-renders
+	- Since we are using dependency array it changes the behaviour of the useEffect => What does mean by this ??
+		- If no dependency array it called on every render.
+		- If dependency array is empty [] => It will only on the intial render and just once =>  not called on every render
+		- What if we pass anything on the dependency array ? then it will be called only when dependency changes
+		
+* useState() Hook =>
+	- create useState() hook within the component fucntion, instead of creating outside function
+	- It is use to create the local state variables inside your functional component
+	- use useState top of the fucntion => So that we dont have inconsistency in our code. Since JS is synchronous single htreaded languge when it executes it creates the state variable intially and helps devs to implement the code without any error and its good practise
+	- Never create a useState withing the if else, loops and functions anyother conditions and keep outside 
+	
+	
+Routing in react
+- Library which use => react-router-dom
+- After installing, we need to create a routing configuraiton in the App.js file which is root file.
+- import {createBrowserRouter} from 'react-router-dom'
+- createBrowserRouter -> what is this ?
+	- This explains us what will happen when specific path is called.
+	- it will contains array [] of data inside and takes below parameters
+	const appRouter = createBrowserRouter([
+	{
+			path:"/",
+			element : <AppLayout/>
+		  } 
+		  {
+			path:"/about",
+			element : <About/>
+		  }
+	])
+	
+- Once we create the configuraion we need to provide a confifuration to render in the UI. How we can achieve this, react-router-dom provides us a RouterProvider and we need to use this.
+		-  as below
+			import { createBrowserRouter, RouterProvider } from "react-router";
+			
+			const AppLayout = () => {
+			return (
+				<div className="app">
+				<Header />
+				<Body />
+				</div>
+			);
+			};
+			const appRouter = createBrowserRouter([
+			{
+				path: "/",
+				element: <AppLayout />,
+			},
+			{
+				path: "/about",
+				element: <About />,
+			},
+			]);
+			
+			//Create Root Element using ReactDOM
+			const root = ReactDOM.createRoot(document.getElementById("root"));
+			
+			//Render the heading to DOM
+			root.render(<RouterProvider router={appRouter} />);
+
+- So what if user entered invalid url => how we need to handle the Error Page
+	* For this we need to use the errorElement as below
+			const appRouter = createBrowserRouter([
+				{
+					path: "/",
+					element: <AppLayout />,
+					errorElement: <Error />,
+				},
+				{
+					path: "/about",
+					element: <About />,
+					errorElement: <Error />,
+				},
+				{
+					path: "/contact",
+					element: <Contact />,
+					errorElement: <Error />,
+				},
+			]);
+			
+- react-router-dom provides the useRouteError() hook -> It provides the more information about the error.
+- Example:
+	import { useRouteError } from "react-router";
+	
+	const Error = () => {
+		const err = useRouteError();
+		return (
+			<>
+			<h2>Error Page</h2>
+			<h3>{err.status + " : " + err.statusText}</h3>
+			</>
+		);
+	};
+	export default Error;
+
+- Creating the multiple Children routes in React using react-router-dom
+- Things we are using to create a children are	
+	1. children : []
+	2. Outlet : Which is like tunnel and used to show the child component and it comes from the react-router
+	3. Example:
+		import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
+		
+		const AppLayout = () => {
+		return (
+			<div className="app">
+			<Header />
+			<Outlet />
+			</div>
+		);
+		};
+		const appRouter = createBrowserRouter([
+		{
+			path: "/",
+			element: <AppLayout />,
+			children: [
+			{
+				path: "/",
+				element: <Body />,
+			},
+			{
+				path: "/about",
+				element: <About />,
+			},
+			{
+				path: "/contact",
+				element: <Contact />,
+			},
+			],
+			errorElement: <Error />,
+		},
+		]);
+		
+		//Create Root Element using ReactDOM
+		const root = ReactDOM.createRoot(document.getElementById("root"));
+		
+		//Render the heading to DOM
+		root.render(<RouterProvider router={appRouter} />);
+
+	4. Here we are adding the menu under the main Menu which is AppLayout and providing the child route using children elements.
+	
+- Proving to the navigation to header menus
+	- We need use the Link component using react-router
+	- Example:
+		import { Link } from "react-router";
+		const Header = () => {
+		const [btnName, setBtnName] = useState("Login");
+		return (
+			<div className="header">
+			<div className="logo-container">
+				<img className="logo" src={LOGO_URL} />
+			</div>
+			<div className="nav-items">
+				<ul>
+				<li>
+					<Link to="/">Home</Link>
+				</li>
+				<li>
+					<Link to="/about">About</Link>
+				</li>
+				<li>
+					<Link to="/contact">Contact</Link>
+				</li>
+				<li>Cart</li>
+				<li>
+					<button
+					className="login-btn"
+					onClick={() => {
+						btnName === "Login"
+						? setBtnName("Logout")
+						: setBtnName("Login");
+					}}
+					>
+					{btnName}
+					</button>
+				</li>
+				</ul>
+			</div>
+			</div>
+		);
+		};
+		
+		export default Header;
+	* By using link, React router dom never refresh the entire screen instead it will refresh the components. This is where we come to that React is the Single Page Application.
+	* Whenecer you want to create a Link do not use <a></a> Anchor tag, this leads to refreshing the entire screen. where when you use the Link then only the component get refreshed not entire page.
+	
+- There are 2 types routing in web apps
+	1. Client side Routing
+	2. Server Side Routing
+
+- Things we learnt
+	1. createBrowserRouter
+	2. RouterProvider
+	3. Outlet
+	4. useRouteError
+	5. Link
+	6. Routing
+		- path
+		- element
+		- errorElement
+		
+- Dynamic Routing	
+	* how we are creating the dynamic routing
+	* same as router but we need to use /:resId => resId is parameter which will be used to fetch the Id using => useParams
+	* Example: 
+		      {
+				path: "/restaurant/:resId",
+				element: <RestaurantMenu />,
+			  },
+			  
+	import { useEffect, useState } from "react";
+	import { useParams } from "react-router";
+	
+	const RestaurantMenu = () => {
+	const { resId } = useParams();
+	useEffect(() => {
+		fetchMenu();
+	}, []);
+	
+	const fetchMenu = async () => {
+		const res = await fetch(
+		"https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=72996&catalog_qa=undefined&submitAction=ENTER",
+		);
+	};
+	return (
+		<>
+		<h2>Restaurant Name {resId}</h2>
+		<p>4.3 ⭐⭐⭐⭐ Rs.200 for Two</p>
+		<h3>10Min delivery</h3>
+		<h2>Menu</h2>
+		<ul>
+			<li>Paneer Butter Masala</li>
+			<li>Butter Chicken</li>
+			<li>Palak Paneer</li>
+		</ul>
+		</>
+	);
+	};
+	
+	export default RestaurantMenu;
