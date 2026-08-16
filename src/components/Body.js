@@ -45,7 +45,7 @@ const Body = () => {
   return (
     <div className="body">
       <div className="filter">
-        <div className="search">
+        {/* <div className="search">
           <input
             type="text"
             placeholder="Search for restaurants and food"
@@ -67,8 +67,33 @@ const Body = () => {
           >
             Search
           </button>
+        </div> */}
+        <div className="search-container">
+          <input
+            className="search-input"
+            type="text"
+            onChange={(e) => {
+              setInputText(e.target.value);
+            }}
+            placeholder="Search for restaurants..."
+          />
+
+          <button
+            className="search-btn"
+            onClick={() => {
+              const filteredResult = resListData.filter((res) => {
+                const name = (res.resName || res.name || "").toLowerCase();
+                return name.includes(inputText.toLowerCase());
+              });
+
+              setFilteredRestaurants(filteredResult);
+            }}
+          >
+            Search
+          </button>
         </div>
         <button
+          className="search-btn"
           id="filter-dtn"
           onClick={() => {
             const filteredData = resListData.filter(
@@ -86,7 +111,11 @@ const Body = () => {
       ) : (
         <div className="res-containers">
           {filteredRestaurants.map((res) => (
-            <Link to={`/restaurant/${res.id || res.resId}`}  key={res.id || res.resId}>
+            <Link
+              className="card-link"
+              to={`/restaurant/${res.id || res.resId}`}
+              key={res.id || res.resId}
+            >
               {" "}
               <RestaurantCard resData={res} />
             </Link>
