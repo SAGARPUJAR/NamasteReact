@@ -1,21 +1,25 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
 
 const RestaurantMenu = () => {
-  const result = useState(0);
-  console.log(result);
   const { resId } = useParams();
-  useEffect(() => {
-    fetchMenu();
-  }, []);
+  const resInfo = useRestaurantMenu(resId);
 
-  const fetchMenu = async () => {
-    const res = await fetch(
-      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=72996&catalog_qa=undefined&submitAction=ENTER",
-    );
+  // const result = useState(0);
+  // console.log(result);
 
-    console.log(res);
-  };
+  // useEffect(() => {
+  //   fetchMenu();
+  // }, []);
+
+  // const fetchMenu = async () => {
+  //   const res = await fetch(
+  //     "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=72996&catalog_qa=undefined&submitAction=ENTER",
+  //   );
+
+  //   console.log(res);
+  // };
   return (
     <>
       <h2>Restaurant Name {resId}</h2>

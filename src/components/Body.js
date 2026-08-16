@@ -3,12 +3,14 @@ import { resList } from "../utils/constants";
 import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router";
+import useOnlineStaus from "../utils/useOnlineStaus";
 
 const Body = () => {
   const [resListData, setResList] = useState(resList);
   const [loading, setLoading] = useState(true);
   const [inputText, setInputText] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const isOnline = useOnlineStaus();
 
   useEffect(() => {
     fetchData();
@@ -41,6 +43,10 @@ const Body = () => {
       setLoading(false);
     }
   };
+
+  if (!isOnline) {
+    return <h1>You are offline !!</h1>;
+  }
 
   return (
     <div className="body">
