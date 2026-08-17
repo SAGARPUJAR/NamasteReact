@@ -1,0 +1,210 @@
+Episode 9 - Optimizing our App
+
+=> Custom Hooks
+=> Single Responsibility Principle
+	What is SRP ?
+	* SRP is any funtion or class can perform only single opration and responsible for only single mechanism
+	* Modularity: is breaking the big component into small components, so that our code re-usable,  maintainable and testable.
+	
+=> Custom Hooks
+	- hooks are the special functions which are given by React.
+	- Hooks is the utility functions or helper functions.
+	
+=> Creating the Custom Hook
+Example:
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import useRestaurantMenu from "../utils/useRestaurantMenu";
+
+const RestaurantMenu = () => {
+  const { resId } = useParams();
+  const resInfo = useRestaurantMenu(resId);
+
+  // const result = useState(0);
+  // console.log(result);
+
+  // useEffect(() => {
+  //   fetchMenu();
+  // }, []);
+
+  // const fetchMenu = async () => {
+  //   const res = await fetch(
+  //     "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=72996&catalog_qa=undefined&submitAction=ENTER",
+  //   );
+
+  //   console.log(res);
+  // };
+  return (
+    <>
+      <h2>Restaurant Name {resId}</h2>
+      <p>4.3 ⭐⭐⭐⭐ Rs.200 for Two</p>
+      <h3>10Min delivery</h3>
+      <h2>Menu</h2>
+      <ul>
+        <li>Paneer Butter Masala</li>
+        <li>Butter Chicken</li>
+        <li>Palak Paneer</li>
+      </ul>
+    </>
+  );
+};
+
+export default RestaurantMenu;
+
+
+// Custom Hook
+import { useEffect, useState } from "react";
+
+const useRestaurantMenu = (resId) => {
+  const [resInfo, setResInfo] = useState(null);
+
+  useEffect(() => {
+    fetchMenu(resId);
+  }, [resId]);
+
+  const fetchMenu = async (resId) => {
+    try {
+      const res = await fetch(
+        `https://corsproxy.io/?url=https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=${resId}&catalog_qa=undefined&submitAction=ENTER`
+      );
+
+      if (!res.ok) {
+        throw new Error(`HTTP error: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      console.log("Menu data:", data);
+
+      setResInfo(data);
+    } catch (error) {
+      console.log("Failed to fetch restaurant menu:", error);
+    }
+  };
+
+  return resInfo;
+};
+
+export default useRestaurantMenu;
+
+
+=> custom hook to check avaiulable and unavailable. If available show Tick or show Red if offline
+
+
+import React from "react";
+
+const useOnlineStaus = () => {
+  const [isOnline, setIsOnline] = React.useState(true);
+
+  window.addEventListener("online", () => {
+    setIsOnline(true);
+  });
+
+  window.addEventListener("offline", () => {
+    setIsOnline(false);
+  });
+
+  return isOnline;
+};
+
+export default useOnlineStaus;
+
+
+//Header
+import { LOGO_URL } from "../utils/constants";
+import { useState } from "react";
+import { Link } from "react-router";
+import useOnlineStaus from "../utils/useOnlineStaus";
+
+const Header = () => {
+  const [btnName, setBtnName] = useState("Login");
+  const isOnline = useOnlineStaus();
+  return (
+    <div className="header">
+      <div className="logo-container">
+        <img className="logo" src={LOGO_URL} />
+      </div>
+      <div className="nav-items">
+        <ul>
+          <li>Online Staus: {isOnline ? "✅" : "🔴"}</li>
+          <li>
+            <Link className="card-link" to="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link className="card-link" to="/about">
+              About
+            </Link>
+          </li>
+          <li>
+            <Link className="card-link" to="/contact">
+              Contact
+            </Link>
+          </li>
+          <li>Cart</li>
+          <li>
+            <button
+              className="login-btn"
+              onClick={() => {
+                btnName === "Login"
+                  ? setBtnName("Logout")
+                  : setBtnName("Login");
+              }}
+            >
+              {btnName}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Header;
+
+
+Optimizing the code
+1. The process of breaking the solution/application into smalled size is called Chunking
+2. And also called as below
+	- Code Splitting
+	- Dynamic bundling
+	- Lazy loading
+	- On Demand Loading
+	- Dynamic import
+	- Lazy loading
+	etc
+	
+=> how to create a lazy loading
+example:
+1. App.js 
+import React, { lazy, Suspense } from "react";
+const Grocery = lazy(() => import("./components/Grocery"));
+
+{
+  path: "/grocery",
+  element: <Suspense><Grocery /></Suspense>,
+},
+
+
+// Grocery.js
+import React from "react";
+
+const Grocery = () => {
+  return (
+    <div>
+      <h1>Grocery Store</h1>
+    </div>
+  );
+};
+
+export default Grocery;
+
+
+//Header
+ </li>
+          <li>
+            <Link className="card-link" to="/grocery">
+              Grocery
+            </Link>
+          </li>
