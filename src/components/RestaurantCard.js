@@ -13,10 +13,14 @@ const RestaurantCard = (props) => {
     : "https://dineout-media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_600,h_400/DINEOUT_ALL_RESTAURANTS/IMAGES/RESTAURANT_IMAGE_SERVICE/2025/8/30/0c394307-621b-4499-8d2c-19c88a221cf5_image01900ee3f119343d2b35697131496aefc.JPG";
 
   return (
-    <div style={{ backgroundColor: "#f0f0f0f0" }} className="card">
+    <div className="card m-4 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 w-[300px] bg-gray-50 hover:bg-gray-100">
       <div className="card-content">
-        <img className="card-img" src={imageUrl} alt={restaurantName} />
-        <h3 className="card-title">{restaurantName}</h3>
+        <img
+          className="card-img rounded-lg"
+          src={imageUrl}
+          alt={restaurantName}
+        />
+        <h3 className="font-bold text-lg py-2">{restaurantName}</h3>
         <h4>{Array.isArray(cuisines) ? cuisines.join(", ") : cuisines}</h4>
         <h4 className="card-rating">⭐ {avgRating}</h4>
         <h4 className="card-price">{costForTwo}</h4>

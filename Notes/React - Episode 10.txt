@@ -1,0 +1,48 @@
+Episode-10 | Jo Dikhta Hai, Vo Bikta Hai
+
+=> how to apply the css to react application.
+=> we are going to make application to look beautiful
+
+Ways to add the style to our applciation.
+
+1. adding the css in the index.css and write the css, basic way to add the style
+2. SCSS and SASS (Writing the CSS with some superpowers) ->  Not recommended to use in production. 
+3. Recommended way:
+	- Style Component -> To write the CSS (styled-component.com)
+	- Tailwind CSS -> We are using in the application today
+	- Material UI
+	- Chakra UI
+	- Bootstrap
+	- ant deisgn 
+	
+ You just get the pre-built component and you just use this and make application beautiful
+ 
+ 
+Tailwind CSS: Rapidly build modern websites without ever leaving your HTML
+Configuring the Tailwind CSS to react application:
+- Goto https://tailwindcss.com/docs/installation/using-vite
+- select the Framework Guides
+	- select Parcel  beacause we are using the Parcel
+	- https://tailwindcss.com/docs/installation/framework-guides/parcel
+- Install Tailwind CSS with Parcel
+	- Install Tailwind CSS : npm install tailwindcss @tailwindcss/postcss
+- Configure PostCSS: Create a .postcssrc file in your project root, and enable the @tailwindcss/postcss plugin. (- postcss: is tool for transforming the css with Javascript) 
+	>	{ 
+			"plugins": {
+				"@tailwindcss/postcss": {}
+			}
+		}
+- Import Tailwind CSS : Create a ./src/index.css file and add an @import for Tailwind CSS.
+	- @import "tailwindcss";
+	
+- Start your build process
+	> npm start
+	
+- 
+
+- Tailwind css is light weight
+- It keeps bundle very small and small in size
+
+- Features of Tailwind css
+=> Build whatever you want
+=> Its tiny, never ship unused CSS again
