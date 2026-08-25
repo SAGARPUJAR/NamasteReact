@@ -1,9 +1,10 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import { resList } from "../utils/constants";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router";
 import useOnlineStaus from "../utils/useOnlineStaus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   const [resListData, setResList] = useState(resList);
@@ -11,6 +12,8 @@ const Body = () => {
   const [inputText, setInputText] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const isOnline = useOnlineStaus();
+  const PromotedRestaurantCard = withPromotedLabel(RestaurantCard);
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   useEffect(() => {
     fetchData();
@@ -29,9 +32,10 @@ const Body = () => {
           (card) => card?.card?.card?.id === "restaurant_grid_listing_v2",
         )?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
 
-      const formattedRestaurants = restaurants.map((restaurant) => ({
+      const formattedRestaurants = restaurants.map((restaurant, index) => ({
         ...restaurant.info,
         id: restaurant.info.id,
+        promoted: index % 2 === 0, // Mark every second restaurant as promoted
       }));
 
       setResList(formattedRestaurants);
@@ -62,7 +66,7 @@ const Body = () => {
           />
 
           <button
-            className="px-4 py-2 btn-primary bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer" 
+            className="px-4 py-2 btn-primary bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer"
             onClick={() => {
               const filteredResult = resListData.filter((res) => {
                 const name = (res.resName || res.name || "").toLowerCase();
@@ -77,7 +81,7 @@ const Body = () => {
         </div>
         <div className="search-container p-4 m-4">
           <button
-            className="px-4 py-2 btn-primary bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer" 
+            className="px-4 py-2 btn-primary bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer"
             id="filter-dtn"
             onClick={() => {
               const filteredData = resListData.filter(
@@ -88,6 +92,13 @@ const Body = () => {
           >
             Top rated restaurant
           </button>
+          <input
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+            className="search-input border border-gray-300 rounded-lg p-2 mr-2 w-100"
+            type="text"
+            placeholder="User Context"
+          />
         </div>
       </div>
 
@@ -101,8 +112,11 @@ const Body = () => {
               to={`/restaurant/${res.id || res.resId}`}
               key={res.id || res.resId}
             >
-              {" "}
-              <RestaurantCard resData={res} />
+              {res.promoted ? (
+                <PromotedRestaurantCard resData={res} />
+              ) : (
+                <RestaurantCard resData={res} />
+              )}
             </Link>
           ))}
         </div>

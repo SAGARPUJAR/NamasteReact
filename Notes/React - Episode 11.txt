@@ -1,0 +1,278 @@
+React - Episode 11 - Data is New Oil
+
+=> Higher Order Components
+=> Pure Functions
+=> Controlled and Uncontroller Components
+=> Filter Function() and Building Accordin
+=> React Dev Tools
+=> Prop Drills
+=> React Context
+=> Inteview Questions
+
+1. Higer Order Components
+	- Higher Order components is the function takes a component and return the component.
+	- Basically HIgher Order Component, takes a component as the input and it enhances and add extra feature and return new components.
+	- Basically Higher order components are pure functions and used for enhancing the components 
+	- Example:
+		=> our dataset has promoted field which is boolean values, if resturantes are promoted then we need to show label.
+		steps to replicate:
+		1. Create the component which takes the compoenents are input and return a new compoenent as new compoenent
+			export const withPromotedLabel = (RestaurantCardComponent) => {
+				return (props) => {
+					return (
+					<>
+						<label className="bg-black text-white px-2 py-1 rounded-md">
+						Promoted
+						</label>
+						<RestaurantCardComponent {...props} />
+					</>
+					);
+				};
+			};
+		
+		2. on the <Body> Component we need to make sure data needs to be passed correctly as below
+			- import : import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
+			- Pass components to Function : 
+				  const PromotedRestaurantCard = withPromotedLabel(RestaurantCard);
+			- While Loading the component:
+				 {res.promoted ? (
+						<PromotedRestaurantCard resData={res} />
+					) : (
+						<RestaurantCard resData={res} />
+				 )}
+
+2. Controller and Unctroller Component and Lifting the State up (VIP) -> related to data in react
+	- One important thing in React is to manage the maintain/manage the state of the data.
+	- In simple we can say that, we have 2 layers in UI
+		1. UI Layer -> JSX
+		2. Data Layer -> State
+	- UI Layer is powered by Data Layer
+	- If you know how to manage the data in your application, react will be very superfast and performance is too good.
+	- we are going to see how we are going to manage the Data Layer.
+	
+	
+-> Building the Menu 
+	- Implemented the accordin feature
+	
+Important Tools : React Dev Tools
+	- It will install:
+		1. Compoenets
+		2. Profiler
+		
+=> Lifting State up -> Read on react docuement -> Very important interview questions
+
+Homework:  
+
+----------------------------------------
+Props Drilling: 
+- When application grows there will be many components and componenets are related to each other.
+- one way data stream in React -> Executes from the Top to bottom
+
+The problem with passing props
+- Passing props is great way to explicitly pipe data through your UI tree to the componenets that use it.
+- But passing props can be become verbose and incovenient when you need to pass some prop deeply through the tree or if many components need the same props.
+
+so some times we want to fetch the data from one compoenet to another but if the hieracy is too big we need to pass the values to each compoenets and get the value in the Child compoenent -> TO improve this React introduced concept called Context API.
+
+
+-----------------------------------
+React Context: 
+- Context API solves the Propes drilling
+- Create a Context and access anywhere in the application 
+- In Fucntion Components -> we fetch using useContext
+- In Class Compoenets    -> we fetch using <Context.Consumers></Context.Consumers>
+
+
+Example:
+import { createContext } from "react";
+
+const UserContext = createContext({
+  loggedInUser: "SAGAR PUJAR",
+});
+
+export default UserContext;
+    
+//Class base Components
+<div>
+          LoggedIn User:
+          <UserContext.Consumer>
+            {({ loggedInUser }) => <h1>{loggedInUser}</h1>}
+          </UserContext.Consumer>
+        </div>
+		
+		
+Function Compoenets:
+import { useContext, useState } from "react";
+import UserContext from "../utils/UserContext";
+
+const Header = () => {
+  const { loggedInUser } = useContext(UserContext);
+  return (
+    <div className="flex justify-between shadow-blue-100 shadow-md p-4">
+      <div className="flex items-center">
+        <ul className="flex p-4 m-4">
+          <li className="px-4 py-2">Online Staus: {isOnline ? "✅" : "🔴"}</li>
+          <li className="px-4 py-2">
+            <Link className="card-link" to="/">
+              Home
+            </Link>
+          </li>
+          <li className="px-4 py-2">
+            <Link className="card-link" to="/about">
+              About
+            </Link>
+          </li>
+          <li className="px-4 py-2">
+            <Link className="card-link" to="/contact">
+              Contact
+            </Link>
+          </li>
+          <li className="px-4 py-2">
+            <Link className="card-link" to="/grocery">
+              Grocery
+            </Link>
+          </li>
+          <li className="px-4 py-2">Cart</li>
+          <li className="px-4 py-2">
+            <button
+              className="login-btn"
+              onClick={() => {
+                btnName === "Login"
+                  ? setBtnName("Logout")
+                  : setBtnName("Login");
+              }}
+            >
+              {btnName}
+            </button>
+          </li>
+          <li className="px-4 py-2">{loggedInUser}</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default Header;
+
+
+Providing the Context to Entire Application:
+Example: Showing the username in the whole application by Creating the authentication and setting up in the user
+UserContext:
+import { createContext } from "react";
+
+const UserContext = createContext({
+  loggedInUser: "Default User",
+});
+
+export default UserContext;
+
+
+//App.js
+import UserContext from "./utils/UserContext";
+const AppLayout = () => {
+  //Authentication
+  const [userName, setUserName] = useState();
+  useEffect(() => {
+    // Make an API CALL & send username and Password
+    const data = {
+      name: "Sagar Pujar",
+    };
+    setUserName(data.name);
+  }, []);
+
+  return (
+    // Proviging the content to entire application 
+    // Access anywhere in the entire applicaiton
+    <UserContext.Provider value={{ loggedInUser: userName }}>
+      <div className="app">
+        <Header />
+        <Outlet />
+      </div>
+    </UserContext.Provider>
+  );
+};
+
+- We can provide different UserContext.Provider to any compoenent
+example:
+import UserContext from "./utils/UserContext";
+const AppLayout = () => {
+  //Authentication
+  const [userName, setUserName] = useState();
+  useEffect(() => {
+    // Make an API CALL & send username and Password
+    const data = {
+      name: "Sagar Pujar",
+    };
+    setUserName(data.name);
+  }, []);
+
+  return (
+    // Proviging the content to entire application
+    // Access anywhere in the entire applicaiton
+    <UserContext.Provider value={{ loggedInUser: userName }}> // Other compoenent will show this value
+      <div className="app">
+        <UserContext.Provider value={{ loggedInUser: "Test User" }}> // Only Header Component will show Test User 
+          <Header />
+        </UserContext.Provider>
+        <Outlet />
+      </div>
+    </UserContext.Provider>
+  );
+};
+
+Make sure you use Data Link Layer is so good. 
+React Application run UI Layer and Data Layer
+and Makesure Data Layer keep important things
+
+
+Another way to update the React Context in whole application
+import UserContext from "./utils/UserContext";
+const AppLayout = () => {
+  //Authentication
+  const [userName, setUserName] = useState();
+  useEffect(() => {
+    // Make an API CALL & send username and Password
+    const data = {
+      name: "Sagar Pujar",
+    };
+    setUserName(data.name);
+  }, []);
+
+  return (
+    // Proviging the content to entire application
+    // Access anywhere in the entire applicaiton
+    <UserContext.Provider value={{ loggedInUser: userName, setUserName }}> // Pass Method to set the userName
+      <div className="app">
+        {/* <UserContext.Provider value={{ loggedInUser: "Test User" }}> */}
+        <Header />
+        {/* </UserContext.Provider> */}
+        <Outlet />
+      </div>
+    </UserContext.Provider>
+  );
+};
+
+
+Body.js
+import { useEffect, useState, useContext } from "react";
+import UserContext from "../utils/UserContext";
+const Body = () => {
+	const { loggedInUser, setUserName } = useContext(UserContext);
+	return (
+	// now it will update in the entire application.
+		  <input
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+            className="search-input border border-gray-300 rounded-lg p-2 mr-2 w-100"
+            type="text"
+            placeholder="User Context"
+          />
+	)
+	  
+	  
+	
+}
+
+Interview Questions:
+1. Difference between Context v/s Redux Tool Kit
+- in Industry we usually use Redux Tool to manage our state.
