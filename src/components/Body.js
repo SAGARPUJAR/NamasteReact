@@ -22,7 +22,7 @@ const Body = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://corsproxy.io/?url=https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9568868&lng=77.52002089999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9568868&lng=77.52002089999999&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING",
       );
       const json = await response.json();
 
@@ -93,7 +93,7 @@ const Body = () => {
             Top rated restaurant
           </button>
           <input
-            value={loggedInUser}
+            value={loggedInUser ?? ""}
             onChange={(e) => setUserName(e.target.value)}
             className="search-input border border-gray-300 rounded-lg p-2 mr-2 w-100"
             type="text"

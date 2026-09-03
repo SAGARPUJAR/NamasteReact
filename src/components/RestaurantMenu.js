@@ -13,9 +13,7 @@ const RestaurantMenu = () => {
       const menuUrl = `https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9568868&lng=77.52002089999999&restaurantId=${resId}&catalog_qa=undefined&submitAction=ENTER`;
       console.log(menuUrl);
       try {
-        const response = await fetch(
-          `https://corsproxy.io/?url=${encodeURIComponent(menuUrl)}`,
-        );
+        const response = await fetch(menuUrl);
         if (!response.ok) {
           throw new Error(`HTTP error: ${response.status}`);
         }
