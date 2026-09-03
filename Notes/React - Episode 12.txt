@@ -1,0 +1,277 @@
+React - Episode 12 - Lets build our Store
+
+=> How to manage state using Redux
+=> Redux
+=> Redux works on the DataLayer
+
+
+-> When you build small scale and Mid Scale application the redux is not mandatory
+-. We wil be using in large scale application where we will performing the lots of read and write operations
+
+-> React and Redux are two different libraries
+- We dont only use redux and also we use
+	* zustand
+	
+- Primarly used to handle the state management
+- It offers easy debugging
+
+- Reduct is predictable state container for JS Apps
+- It works with other libraries as well
+- Redux team offers
+	* React-Redux -> 
+	* Redux Toolkit -> Newer way of writting the Redux
+	
+- Redux Toolkit
+* The Redux Toolkit package is intended to be the standard way to write Redux logic. It was originally created to help address three common concerns about Redux:
+  - "Configuring a Redux store is too complicated"
+  - "I have to add a lot of packages to get Redux to do anything useful"
+  - "Redux requires too much boilerplate code"
+  
+ * Redux Toolkit also includes a powerful data fetching and caching capability that we've dubbed "RTK Query". It's included in the package as a separate set of entry points. It's optional, but can eliminate the need to hand-write data fetching logic yourself.
+ 
+ - Arctitecture of Redux
+ - Redux store is big a object with lot of data and kept in global central place.
+ - ANy component can access the Redux, can read/write functionality
+ - Will store most of the application data into Redux Tool Kit
+ - Its good to keep whole object with much data ??
+	* Its absolutely correct we can have more data.
+- in order to avoid the making object Bigg we use something called
+	- React Slice inside Redux Stored
+	
+- What is slices and why we need it ?
+* To keep seperate data, we make a logical partitions
+	- There can be below slices
+		* User
+		* Cart
+* Cart slice can hold the whole cart data here
+
+When I click on Add button -> How this will save into Cart Slice
+React says that we cannot directly insert the item to cart slice there is a way
+- When I click on Add button -> It dispatches an action -> It calls a function () = {} -> this function will modify the cart slice
+- what is this function() 
+	* This function is called Reducer()
+	* This Reduxer() funciton will modify the cart
+
+Add -> Dispatch the Action -> which calls the reducer function -> Update the Cart slice
+
+Why are we doing this ?
+will check while coding
+
+-> How to read from cart slice ?
+For that we use something known as Selector
+-> To read data from the cart slice -> Selector -> Selector will give you data over the cart
+- When we use the selector -> this is called subscrbing to store (its sync with store)
+- How do we subscribe -> using the selector
+
+# Redux Tool Kit
+- Install Redux and Redux Tolls (@reduxjs/toolkit and react-redux)
+- Build our store
+- Connect a store to an app
+- Create a Card Slice to add items to cart
+- dispatch(action)
+- read the using Selector
+
+Steps to implement the Redux
+1. Install the libraries
+	- npm i @reduxjs/toolkit
+	- nom i react-redux
+
+2. Create the store as bwlow in > Utils
+	import { configureStore } from "@reduxjs/toolkit";
+	const appStore = configureStore({});
+	export default appStore;
+
+3. Now provide a store to an application in App.js file using Provider(react-redux)
+
+	import { Provider } from "react-redux";
+	import appStore from "./utils/appStore";
+	
+	const AppLayout = () => {
+	return (
+		// Proviging the content to entire application
+		// Access anywhere in the entire applicaiton
+		<Provider strore={appStore}> // attach the store to application
+		<UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+			<div className="app">
+			{/* <UserContext.Provider value={{ loggedInUser: "Test User" }}> */}
+			<Header />
+			{/* </UserContext.Provider> */}
+			<Outlet />
+			</div>
+		</UserContext.Provider>
+		</Provider>
+	);
+	};
+
+4. Create the Card Slice and add it in the Store
+	import { createSlice } from "@reduxjs/toolkit";
+	
+	const cartSlice = createSlice({
+	name: "cart",
+	initialState: {
+		items: [],
+	},
+	reducers: {
+		addItem: (state, action) => {
+			//Mutating the state
+		state.items.push(action.payload);
+		},
+		removeItem: (state) => {
+		state.items.pop();
+		},
+		clearItem: (state) => {
+		state.items = [];
+		},
+	},
+	});
+	
+	export const { addItem, removeItem, clearItem } = cartSlice.actions;
+	export default cartSlice.reducer;
+
+
+5. Add the Slice to Store.
+	import { configureStore } from "@reduxjs/toolkit";
+	import cartReducer from "./cartSlice";
+	
+	const appStore = configureStore({
+	//Combination different reducer function
+	reducer: {
+		cart: cartReducer,
+	},
+	});
+	
+	export default appStore;
+
+
+6. Now showing the details in the cart using Selector
+	// Selector is nothing but hook inside react
+	import React from "react";
+	import { imgURL } from "../utils/constants";
+	import { addItem } from "../utils/cartSlice";
+	import { useDispatch } from "react-redux";
+	
+	const ItemList = ({ items }) => {
+	
+	//Need to get the access to dispatch
+	//we need to get the Dispatch Hook from the react-redux
+	
+	const dispatch = useDispatch();
+	
+	const handleAddItem = () => {
+		//Dispatch an action
+		dispatch(addItem("cart"))
+	};
+	return (
+		<div>
+		{items.map((item, index) => (
+			<div
+			key={`${item.card.info.id}-${index}`}
+			className="m-2 flex justify-between gap-4 border-b-2 p-4 text-left"
+			>
+			<div className="py-2 flex-1 min-w-0">
+				<h3 className="font-semibold text-gray-800">
+				{item.card.info.name}
+				</h3>
+				<p className="mt-1 font-medium text-gray-700">
+				{" "}
+				₹{" "}
+				{item.card.info.price
+					? item.card.info.price / 100
+					: item.card.info.defaultPrice / 100}
+				</p>
+				<p className="mt-2 text-xs text-gray-500 line-clamp-2">
+				{item.card.info.description}
+				</p>
+			</div>
+			<div className="relative shrink-0 pb-4">
+				<img
+				src={imgURL + item.card.info.imageId}
+				className="w-32 h-24 object-cover rounded-lg"
+				/>
+				<button
+				type="button"
+				onClick={handleAddItem}
+				className="absolute bottom-0 left-1/2 inline-flex min-w-24 -translate-x-1/2 items-center justify-center whitespace-nowrap rounded-md border border-green-700 bg-green-600 px-5 py-2 text-sm font-bold text-white shadow-md hover:bg-green-700 cursor-pointer"
+				>
+				ADD +
+				</button>
+			</div>
+			</div>
+		))}
+		</div>
+	);
+	};
+	
+	export default ItemList;
+
+
+Interview:
+1. Subscribe to the particular portoin of the reducer functions. IF we use whole store, if anything changes in store it will updates and we do not need to subscribe to whole store.
+	Get only what required from the store.
+2. When application grows the store become huge and no need to subscribe to whole store.
+3. So whenever we use subscribe to only required stores
+4. The name is selector => We subscribing to selected portion of that store.
+
+--------------
+#use reducers and reduce keyword properly.
+1. reduce is cominations of reducers
+	- reduce will be used when configuring the store.
+2. reducers: contains each reducer function logic
+	- we use this in while creating the slice of the redux
+	
+clearCart:(state, action){
+	//RTK : either Mutate the existing state or return new state
+	//option 1:
+	state.items.length = 0;
+	
+	//Option 2:
+	return {items : []};
+}
+
+Example:
+import { createSlice } from "@reduxjs/toolkit";
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    items: [],
+  },
+  reducers: {
+    addItem: (state, action) => {
+      // Vanilla (older) Redux => DON'T MUTATE and returing was mandatory
+      //   const newItemState = [...state];
+      //   newItemState.items.push(action.payload);
+      //   return newItemState;
+
+      // Redux using immer library to modify the state.
+      // current state > Draft State > New State to redux
+
+      //New Redux toolkit => Mutating the state
+      state.items.push(action.payload);
+    },
+    removeItem: (state) => {
+      state.items.pop();
+    },
+    clearItem: (state) => {
+      //RTK : either Mutate the existing state or return new state
+      //Option 1:
+      //state.items = [];
+      // Option 2:
+      return { items: [] };
+    },
+  },
+});
+
+export const { addItem, removeItem, clearItem } = cartSlice.actions;
+export default cartSlice.reducer;
+
+
+Redux Dev Tools -> install chrome extension
+
+redux:
+1. RTK Query 
+	- Before we were using using middlewares, redux thungs for asynchronous operations.
+	- Basically if we want to make a api call and want to store data inside Redux store there use design pattern which uses middle ware and thungs
+	
+2. Now With react tool kit we use RTK Query
+	- RTK is way to call the APIs
